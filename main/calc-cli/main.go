@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/calc-apps/handlers"
+	"github.com/swintch/calc-apps/handlers"
 	"github.com/swintch/mdw-smarty-calc-lib2/calc"
 )
 

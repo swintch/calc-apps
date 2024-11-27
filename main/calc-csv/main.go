@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 
@@ -10,19 +9,12 @@ import (
 )
 
 func main() {
-	var operation string
-	flag.StringVar(&operation, "op", "+", "Operation to use.")
-	flag.Parse()
-	calculator, ok := calculators[operation]
-	if !ok {
-		log.Fatalf("Unknown operation %s.", operation)
-	}
-	handlerObj := handlers.NewCLIHandler(calculator, os.Stdout)
-	err := handlerObj.Handle(flag.Args())
+
+	handler := handlers.NewCSVHandler(os.Stdin, os.Stdout, os.Stderr, calculators)
+	err := handler.Handle()
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 var calculators = map[string]calc.Calculator{

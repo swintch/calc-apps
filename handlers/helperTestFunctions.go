@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 )
 
@@ -25,9 +26,9 @@ func (this *ReaderErr) Read(p []byte) (n int, err error) { return 0, this.err }
 
 //////////////////////
 
-func assertEquals(t *testing.T, actual, expected string) {
+func assertEquals(t *testing.T, actual, expected any) {
 	t.Helper()
-	if actual != expected {
+	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("actual = %s, expected = %s", actual, expected)
 	}
 }

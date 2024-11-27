@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e18a1ee6-788a-42d5-87c3-057870cbc8dc" name="Changes" comment="adding csv logic">
-      <change afterPath="$PROJECT_DIR$/handlers/helperTestFunctions.go" afterDir="false" />
+    <list default="true" id="e18a1ee6-788a-42d5-87c3-057870cbc8dc" name="Changes" comment="adding more csv logic">
+      <change afterPath="$PROJECT_DIR$/handlers/http.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/handlers/http_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/calc-http/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/cli_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/cli_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/csv.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/csv.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handlers/csv_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/csv_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/helperTestFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/helperTestFunctions.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,10 +146,22 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="getting versioning working" />
     <MESSAGE value="adding csv logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding csv logic" />
+    <MESSAGE value="adding more csv logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding more csv logic" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

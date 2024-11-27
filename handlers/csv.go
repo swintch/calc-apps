@@ -33,32 +33,33 @@ func (this *CSVHandler) Handle() error {
 		}
 		if err != nil {
 			this.stderr.Println(err)
-			continue
+			return err
 		}
 		value1, err := strconv.Atoi(record[0])
 		if err != nil {
-			this.stderr.Println(err)
+			this.stderr.Printf("Invalid Argument %v : error %v", record[0], err)
 			continue
 		}
 		calculator, ok := calculators[record[1]]
 		if !ok {
-			this.stderr.Println(err)
+			this.stderr.Printf("Invalid Argument %v", record[1])
 			continue
 		}
 		value2, err := strconv.Atoi(record[2])
 		if err != nil {
-			this.stderr.Println(err)
+			this.stderr.Printf("Invalid Argument %v : error %v", record[2], err)
 			continue
 		}
 		calcResult := calculator.Calculate(value1, value2)
 		err = this.stdout.Write(append(record, strconv.Itoa(calcResult)))
 		if err != nil {
 			this.stderr.Println(err)
+			return err
 		}
 
 	}
 	this.stdout.Flush()
-	return nil
+	return this.stdout.Error()
 }
 
 var calculators = map[string]calc.Calculator{

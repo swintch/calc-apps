@@ -2,26 +2,11 @@ package handlers
 
 import (
 	"bytes"
-	"errors"
 	"strconv"
 	"testing"
 
 	"github.com/swintch/mdw-smarty-calc-lib2/calc"
 )
-
-func assertEquals(t *testing.T, actual, expected string) {
-	t.Helper()
-	if actual != expected {
-		t.Errorf("actual = %s, expected = %s", actual, expected)
-	}
-}
-
-func assertError(t *testing.T, error, expected error) {
-	t.Helper()
-	if !errors.Is(error, expected) {
-		t.Errorf("Expected error %v, but got error %v", expected, error)
-	}
-}
 
 func TestHandler_NotEnoughArgs(t1 *testing.T) {
 	handlerObj := NewCLIHandler(nil, nil)
@@ -57,7 +42,6 @@ func TestHandler_ValidArguments(t1 *testing.T) {
 }
 
 func TestHandler_WriterError(t1 *testing.T) {
-	boink := errors.New("boink")
 	output := WriterErr{err: boink}
 	testValues := []string{"1", "3"}
 	calculator := &calc.Addition{}
@@ -65,12 +49,4 @@ func TestHandler_WriterError(t1 *testing.T) {
 	err := handlerObj.Handle(testValues)
 	assertError(t1, err, boink)
 	assertError(t1, err, WriterError)
-}
-
-type WriterErr struct {
-	err error
-}
-
-func (this *WriterErr) Write(p []byte) (n int, err error) {
-	return 0, this.err
 }

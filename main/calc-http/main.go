@@ -2,14 +2,13 @@ package main
 
 import (
 	"log"
-	"os"
+	"net/http"
 
 	"github.com/swintch/calc-apps/handlers"
 )
 
 func main() {
-	handle := handlers.NewCSVHandler(os.Stdin, os.Stdout, os.Stderr)
-	err := handle.Handle()
+	err := http.ListenAndServe("localhost:8080", handlers.NewHTTPRouter())
 	if err != nil {
 		log.Fatal(err)
 	}

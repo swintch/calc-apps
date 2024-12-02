@@ -51,3 +51,31 @@ func TestCLIHandler_TestBadOperator(t *testing.T) {
 	err := handle.Handler([]string{"1", "2"})
 	AssertError(t, err, InvalidOperator)
 }
+
+func TestCLIHandler_TestAddition(t *testing.T) {
+	output := bytes.Buffer{}
+	handle := NewCLIHandler("+", &output)
+	err := handle.Handler([]string{"1", "2"})
+	AssertError(t, err, nil)
+}
+
+func TestCLIHandler_TestSubtraction(t *testing.T) {
+	output := bytes.Buffer{}
+	handle := NewCLIHandler("-", &output)
+	err := handle.Handler([]string{"1", "2"})
+	AssertError(t, err, nil)
+}
+
+func TestCLIHandler_TestMultiplication(t *testing.T) {
+	output := bytes.Buffer{}
+	handle := NewCLIHandler("*", &output)
+	err := handle.Handler([]string{"1", "2"})
+	AssertError(t, err, nil)
+}
+
+func TestCLIHandler_TestDivision(t *testing.T) {
+	output := bytes.Buffer{}
+	handle := NewCLIHandler("/", &output)
+	err := handle.Handler([]string{"1", "2"})
+	AssertError(t, err, nil)
+}

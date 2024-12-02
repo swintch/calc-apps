@@ -1,16 +1,19 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
-	"github.com/calc"
-	"github.com/calc-apps/handlers"
+	"github.com/swintch/calc-apps/handlers"
 )
 
 func main() {
-	handle := handlers.NewCLIHandler(&calc.Addition{}, os.Stdout)
-	err := handle.Handler(os.Args[1:])
+	var operator string
+	flag.StringVar(&operator, "op", "+", "the operator to use")
+	flag.Parse()
+	handle := handlers.NewCLIHandler(operator, os.Stdout)
+	err := handle.Handler(flag.Args())
 	if err != nil {
 		log.Fatalln(err)
 	}

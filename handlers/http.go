@@ -39,7 +39,7 @@ func (this *HTTPHandler) ServeHTTP(response http.ResponseWriter, request *http.R
 		return
 	}
 	result := this.calculator.Calculate(value1, value2)
-	response.Header().Set("Content-Type", "plain/text; charset=utf-8")
+	response.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	response.WriteHeader(http.StatusOK)
 	_, err = fmt.Fprint(response, result)
 	if err != nil {

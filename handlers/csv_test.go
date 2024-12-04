@@ -4,67 +4,58 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+
+	"github.com/smarty/assertions/should"
+	"github.com/smarty/gunit"
 )
 
-func TestNewCSVHandler_TestAddition(t *testing.T) {
-	output := bytes.Buffer{}
-	logs := bytes.Buffer{}
-	input := "1,+,2"
-	handle := NewCSVHandler(strings.NewReader(input), &output, &logs)
-	err := handle.Handle()
-	AssertError(t, err, nil)
-	AssertEquals(t, output.String(), "1,+,2,3\n")
-	if logs.Len() > 0 {
-		t.Logf("\n%s", logs.String())
-	}
+func TestCSVHandler(t *testing.T) {
+	gunit.Run(new(CSVHandlerFixture), t)
 }
 
-func TestNewCSVHandler_MultipleValues(t *testing.T) {
+type CSVHandlerFixture struct {
+	*gunit.Fixture
+}
+
+func (this *CSVHandlerFixture) TestAddition() {
 	output := bytes.Buffer{}
-	logs := bytes.Buffer{}
+	input := "1,+,2"
+	handle := NewCSVHandler(strings.NewReader(input), &output, this)
+	err := handle.Handle()
+	this.So(err, should.Equal, nil)
+	this.So(output.String(), should.Equal, "1,+,2,3\n")
+}
+
+func (this *CSVHandlerFixture) TestMultipleValues() {
+	output := bytes.Buffer{}
 	input := "1,+,2\n2,-,2\n2,*,2\n6,/,3"
-	handle := NewCSVHandler(strings.NewReader(input), &output, &logs)
+	handle := NewCSVHandler(strings.NewReader(input), &output, this)
 	err := handle.Handle()
-	AssertError(t, err, nil)
-	AssertEquals(t, output.String(), "1,+,2,3\n2,-,2,0\n2,*,2,4\n6,/,3,2\n")
-	if logs.Len() > 0 {
-		t.Logf("\n%s", logs.String())
-	}
+	this.So(err, should.Equal, nil)
+	this.So(output.String(), should.Equal, "1,+,2,3\n2,-,2,0\n2,*,2,4\n6,/,3,2\n")
 }
 
-func TestNewCSVHandler_MultipleBadValues(t *testing.T) {
+func (this *CSVHandlerFixture) TestMultipleBadValues() {
 	output := bytes.Buffer{}
-	logs := bytes.Buffer{}
 	input := "1,+,2\nNaN,-,2\n2,NaN,2\n6,/,NaN"
-	handle := NewCSVHandler(strings.NewReader(input), &output, &logs)
+	handle := NewCSVHandler(strings.NewReader(input), &output, this)
 	err := handle.Handle()
-	AssertError(t, err, nil)
-	AssertEquals(t, output.String(), "1,+,2,3\n")
-	if logs.Len() > 0 {
-		t.Logf("\n%s", logs.String())
-	}
+	this.So(err, should.Equal, nil)
+	this.So(output.String(), should.Equal, "1,+,2,3\n")
 }
 
-func TestNewCSVHandler_TestReadError(t *testing.T) {
+func (this *CSVHandlerFixture) TestReadError() {
 	output := bytes.Buffer{}
-	logs := bytes.Buffer{}
 	input := ReaderError{err: boink}
-	handle := NewCSVHandler(&input, &output, &logs)
+	handle := NewCSVHandler(&input, &output, this)
 	err := handle.Handle()
-	AssertError(t, err, boink)
-	if logs.Len() > 0 {
-		t.Logf("\n%s", logs.String())
-	}
+	this.So(err, should.Equal, boink)
 }
 
-func TestNewCSVHandler_TestWriteError(t *testing.T) {
+func (this *CSVHandlerFixture) TestWriteError() {
 	output := WriterError{err: boink}
-	logs := bytes.Buffer{}
 	input := "1,+,2"
-	handle := NewCSVHandler(strings.NewReader(input), &output, &logs)
+	handle := NewCSVHandler(strings.NewReader(input), &output, this)
 	err := handle.Handle()
-	AssertError(t, err, boink)
-	if logs.Len() > 0 {
-		t.Logf("\n%s", logs.String())
-	}
+	this.So(err, should.Equal, boink)
 }

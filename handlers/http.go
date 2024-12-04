@@ -43,6 +43,7 @@ func (this *HTTPHandler) ServeHTTP(response http.ResponseWriter, request *http.R
 	response.WriteHeader(http.StatusOK)
 	_, err = fmt.Fprint(response, result)
 	if err != nil {
-		log.Println("Response write error: ", err)
+		log.Println("Response Error:", err)
 	}
+
 }

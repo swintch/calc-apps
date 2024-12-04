@@ -5,77 +5,86 @@ import (
 	"os"
 	"strconv"
 	"testing"
+
+	"github.com/smarty/assertions/should"
+	"github.com/smarty/gunit"
 )
 
-func TestCLIHandler_InvalidNumberOfArguments(t *testing.T) {
+func TestCLIHandler(t *testing.T) {
+	gunit.Run(new(CLIHandlerFixture), t)
+}
+
+type CLIHandlerFixture struct {
+	*gunit.Fixture
+}
+
+func (this *CLIHandlerFixture) TestInvalidNumberOfArguments() {
 	handle := NewCLIHandler("+", os.Stdout)
 	err := handle.Handler([]string{"1"})
-	AssertError(t, err, InvalidNumberOfArguments)
+	this.So(err, should.Wrap, InvalidNumberOfArguments)
 }
 
-func TestCLIHandler_InvalidFirstArgument(t *testing.T) {
+func (this *CLIHandlerFixture) InvalidFirstArgument() {
 	handle := NewCLIHandler("+", os.Stdout)
 	err := handle.Handler([]string{"a", "2"})
-	AssertError(t, err, InvalidArgumentFormat)
-	AssertError(t, err, strconv.ErrSyntax)
+	this.So(err, should.Wrap, InvalidArgumentFormat)
+	this.So(err, should.Wrap, strconv.ErrSyntax)
 }
 
-func TestCLIHandler_InvalidSecondArgument(t *testing.T) {
+func (this *CLIHandlerFixture) InvalidSecondArgument() {
 	handle := NewCLIHandler("+", os.Stdout)
 	err := handle.Handler([]string{"1", "b"})
-	AssertError(t, err, InvalidArgumentFormat)
-	AssertError(t, err, strconv.ErrSyntax)
+	this.So(err, should.Wrap, InvalidArgumentFormat)
+	this.So(err, should.Wrap, strconv.ErrSyntax)
 }
 
-func TestCLIHandler_TestOutputToConsole(t *testing.T) {
+func (this *CLIHandlerFixture) TestOutputToConsole() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("+", &output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, nil)
-	AssertEquals(t, output.String(), "3")
-
+	this.So(err, should.Equal, nil)
+	this.So(output.String(), should.Equal, "3")
 }
 
-func TestCLIHandler_TestOutputToConsoleError(t *testing.T) {
+func (this *CLIHandlerFixture) TestOutputToConsoleError() {
 	output := &WriterError{err: boink}
 	handle := NewCLIHandler("+", output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, boink)
-	AssertError(t, err, ConsoleWriteError)
-
+	this.So(err, should.Wrap, boink)
+	this.So(err, should.Wrap, ConsoleWriteError)
 }
 
-func TestCLIHandler_TestBadOperator(t *testing.T) {
+func (this *CLIHandlerFixture) TestBadOperator() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("adff", &output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, InvalidOperator)
+	this.So(err, should.Wrap, InvalidOperator)
 }
 
-func TestCLIHandler_TestAddition(t *testing.T) {
+func (this *CLIHandlerFixture) TestAddition() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("+", &output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, nil)
+	this.So(err, should.Equal, nil)
 }
 
-func TestCLIHandler_TestSubtraction(t *testing.T) {
+func (this *CLIHandlerFixture) TestSubtraction() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("-", &output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, nil)
+	this.So(err, should.Equal, nil)
 }
 
-func TestCLIHandler_TestMultiplication(t *testing.T) {
+func (this *CLIHandlerFixture) TestMultiplication() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("*", &output)
 	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, nil)
+	this.So(err, should.Equal, nil)
 }
 
-func TestCLIHandler_TestDivision(t *testing.T) {
+func (this *CLIHandlerFixture) TestDivision() {
 	output := bytes.Buffer{}
 	handle := NewCLIHandler("/", &output)
-	err := handle.Handler([]string{"1", "2"})
-	AssertError(t, err, nil)
+	err := handle.Handler([]string{"6", "2"})
+	this.So(err, should.Equal, nil)
 }

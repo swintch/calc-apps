@@ -22,6 +22,7 @@ func (this *CLIHandlerFixture) TestInvalidNumberOfArguments() {
 	handle := NewCLIHandler("+", os.Stdout)
 	err := handle.Handler([]string{"1"})
 	this.So(err, should.Wrap, InvalidNumberOfArguments)
+
 }
 
 func (this *CLIHandlerFixture) InvalidFirstArgument() {

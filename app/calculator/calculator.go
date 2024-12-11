@@ -2,30 +2,39 @@ package calculator
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/swintch/calc"
-	commands1 "github.com/swintch/calc-apps/app/commands"
+	commandType "github.com/swintch/calc-apps/app/commands"
 )
 
 type Calculator interface{ Calculate(a, b int) int }
 
 type Handler struct{ add, sub, mul, div Calculator }
 
-func (this *Handler) Handle(ctx context.Context, commands ...any) {
-
-	switch typed := commands[0].(type) {
-	case *commands1.Add:
-		this.ProcessAddition(ctx, typed)
-	case *commands1.Subtraction:
-
-	case *commands1.Multiplication:
-
-	case *commands1.Division:
+func NewHandler(add, sub, mul, div Calculator) *Handler {
+	return &Handler{
+		add: add,
+		sub: sub,
+		mul: mul,
+		div: div,
 	}
 }
 
-func (this *Handler) ProcessAddition(ctx context.Context, command *commands1.Add) {
-	calculator := calc.Addition{}
-	result := calculator.Calculate(command.A, command.B)
-	command.Result.C = result
+func (this *Handler) Handle(ctx context.Context, commands ...any) {
+	for _, command := range commands {
+		switch commandType := command.(type) {
+		case *commandType.Add:
+			commandType.Result.C = this.add.Calculate(commandType.A, commandType.B)
+		case *commandType.Subtraction:
+			commandType.Result.C = this.sub.Calculate(commandType.A, commandType.B)
+		case *commandType.Multiplication:
+			commandType.Result.C = this.mul.Calculate(commandType.A, commandType.B)
+		case *commandType.Division:
+			commandType.Result.C = this.div.Calculate(commandType.A, commandType.B)
+		default:
+			panic(fmt.Sprintf("unsuported command: %T", commandType))
+		}
+
+	}
+
 }
